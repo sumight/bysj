@@ -1,5 +1,13 @@
 // 添加分割线
 /**
+* 在主文档中添加分隔线
+* @function addLine
+*/
+function addLine(){
+    
+}
+
+/**
 * 为所有合理位置预留分割线的位置
 * @function setPartinglinePos
 */
@@ -34,17 +42,8 @@ function setPartinglinePos(){
             
             console.log("click");
         })
-        // .mouseenter(function(){
-        //     
-        //     console.log("enter");
-        // })
-        // .mouseleave(function(){
-        //     
-        //     console.log("leave");
-        // })
-        // .click(function(){
-
-        // })
 }
-
 setPartinglinePos();
+
+
+
