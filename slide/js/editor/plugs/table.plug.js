@@ -66,7 +66,7 @@ define(['./plug.js',"../others/util.js","../others/table.js"],function(Plug,util
 	*/
 	TablePlug.prototype.getScope = getScope;
 	function getScope(){
-		theEditable = util.getFocusElement();
+		var theEditable = util.getFocusElement();
 		var trNode = theEditable.parentNode;
 		if(trNode.tagName != "TR") throw new Error("getScope:获取插件辖区信息错误");
 		var theadOrTbody = trNode.parentNode;
@@ -83,7 +83,8 @@ define(['./plug.js',"../others/util.js","../others/table.js"],function(Plug,util
 	* @return {Boolean} 是否
 	*/
 	TablePlug.prototype.isCharge = function(){
-		theEditable = util.getFocusElement();
+		var theEditable = util.getFocusElement();
+		if(!theEditable) return false;
 		if(theEditable.tagName == "TH") return true;
 		if(theEditable.tagName == "TD") return true;
 		return false;

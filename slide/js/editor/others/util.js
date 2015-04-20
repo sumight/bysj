@@ -128,7 +128,9 @@ define(function(){
 			}else{
 				//如果节点不是文本节点
 				var pNode = focusNode;
+
 				while(!pNode.hasAttribute('contenteditable')){
+					if($(pNode).hasClass('.editor_area')) return false;
 					pNode = pNode.parentNode;
 				}
 				return pNode;

@@ -369,7 +369,8 @@ define(['./plug.js',"../others/util.js"],function(Plug,util){
 	* @example <div class="panel panel-default"><div class="panel-body" contenteditable="true"></div></div>
 	*/ 
 	function createCommentBlock(commentWrap){
-		var editorArea = document.getElementById("editor_area");
+		var theFocusElement = util.getFocusElement();
+		var editorArea = $(theFocusElement).closest(".editor_area").get(0);
 		var commentRect = {};
 		var wrapRect
 		var editorRect

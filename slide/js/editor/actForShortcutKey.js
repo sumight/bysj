@@ -93,15 +93,18 @@ define([
 	*/
 	function ctrlHHandle(event){
 		var headingModel = plugStateMgr.plugsMap['headingPlug'].headingModel
-		var editorArea = document.getElementById('editor_area');
+		var $editorAreas = $('.editor_area');
+
 		if(headingModel){
 			// 处于标题模式
-			editorArea.setAttribute('data-headingmodel','false');
+			$editorAreas.attr('data-headingmodel','false')
+			// editorArea.setAttribute('data-headingmodel','false');
 		}else{
 			// 没有处于标题模式
 			var editable = util.getFocusElement()
 			util.backSelfHeading(editable);
-			editorArea.setAttribute('data-headingmodel','true');
+			$editorAreas.attr('data-headingmodel','true');
+			// editorArea.setAttribute('data-headingmodel','true');
 			plugStateMgr.redispatchDuty();
 		}
 

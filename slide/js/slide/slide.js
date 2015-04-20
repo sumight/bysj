@@ -13,11 +13,11 @@ function addLine(){
 */
 function setPartinglinePos(){
     // 在每个section的前面和后面加上分割线
-    $("#editor_area").find("section")
+    $("#main_block .editor_area").find("section")
         .before("<div class='hr-box'> <hr /> </div>");
     // 添加视觉效果
-    $("#editor_area").find("hr").attr("color","#fff");
-    $("#editor_area")
+    $("#main_block .editor_area").find("hr").attr("color","#fff");
+    $("#main_block .editor_area")
         .on("mouseenter",".hr-box",function(){
             // 如果未激活，则显示效果
             if(!$(this).hasClass("actived")){

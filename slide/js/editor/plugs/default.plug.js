@@ -66,8 +66,10 @@ define(['./plug.js',"../others/util.js"],function(Plug,util){
 	*/
 	DefaultPlug.prototype.isCharge = function(){
 		var theFocus = util.getFocusElement();
+		if(!theFocus) return false;
 		if(theFocus.tagName != "P") return false;
 		if(theFocus.parentNode.tagName != "SECTION") return false;
+		
 		return true;
 	}
 

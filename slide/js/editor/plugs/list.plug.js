@@ -87,6 +87,7 @@ define(['./plug.js',"../others/util.js"],function(Plug,util){
 	*/
 	ListPlug.prototype.isCharge = function(){
 		var theFocus = util.getFocusElement();
+		if(!theFocus) return false;
 		if(theFocus.tagName != "P") return false;
 		if(theFocus.parentNode.tagName != "LI") return false;
 		if(theFocus.parentNode.parentNode.tagName != "UL" && theFocus.parentNode.parentNode.tagName != "OL") return false;
