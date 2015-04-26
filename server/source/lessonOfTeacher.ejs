@@ -22,15 +22,15 @@
         </div>
     </div>
     <div class="container">
-        <input type="text" placeholder='课堂标题' id="lesson-title">
-        <input type="text" placeholder='课堂概述' id="lesson-summary">
+        <input type="text" placeholder='课堂标题' id="lesson-title" value="<%= lessonTitle%>">
+        <input type="text" placeholder='课堂概述' id="lesson-summary" value="<%= summary%>">
         <div class="row">
             <div class="col-xs-3 sider list-box" id="lesson-list-box">
-                <div class="list-group">
-                    <a class="list-group-item" href="javascript:void(0)">课堂内容</a>
-                    <a class="list-group-item" href="javascript:void(0)">演示文稿</a>
+                <div class="list-group" id="important-doc-list">
+                    <a class="list-group-item" href="javascript:void(0)" id="course-content-doc">课堂内容</a>
+                    <a class="list-group-item" href="javascript:void(0)" id="course-ppt-doc">演示文稿</a>
                 </div>
-                <div class="list-group">
+                <div class="list-group" id="other-doc-list">
                     <a class="list-group-item" href="javascript:void(0)">Cras justo odio</a>
                     <a class="list-group-item">Cras justo odio</a>
                     <a class="list-group-item">Cras justo odio</a>
@@ -45,6 +45,11 @@
     </div>
     <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src='./js/refresh.js'></script>
+    <script type="text/javascript" src='./js/test.js'></script>
+    <script type="text/javascript">
+        var lessonId = '<%=  lessonId%>';
+    </script>
 </body>
 
 </html>

@@ -23,8 +23,30 @@ app.post('/user/age', function(req, res) {
 
 app.post('/courseOfTeacher.ejs',function(req,res){
     var userId = req.query.userId;
-    responseEjs(req,res,{userId:userId});
+    responseEjs(req.pathname,res,{userId:userId});
 })
+app.post('/monitor.ejs',function(req,res){
+    var userId = req.query.userId;
+    responseEjs(req.pathname,res,{userId:userId});
+})
+app.post('/lessonOfTeacher.ejs',function(req,res){
+    var lessonId = req.query.lessonId;
+    /**
+    * 从数据库中
+    * 查询出lesson对象
+    */
+    responseEjs(req.pathname,res,{lessonId:lessonId,lessonTitle:'化学的原理（假数据）',summary:'化学原理简洁（假数据）'});
+})
+app.post('/createLesson',function(req,res){
+    var courseId = req.query.courseId;
+    /*新建一个lesson
+    *
+    */
+    var lessonId = '';
+    responseEjs('/lessonOfTeacher.ejs',{courseId:courseId});
+
+})
+
 // 设置默认主页面为index.html
 app.post(/^\/(index)?$/, function(req, res) {
     console.log("index");
@@ -73,11 +95,10 @@ function responseSourse(req, res) {
 /**
  * 渲染一个ejs页面，并且响应
  * @function responseEjs
- * @param {HttpRequest} req 响应对象
+ * @param {String} pathname 文件的路径
  * @param {HttpResponse} res 响应对象
  */
-function responseEjs(req, res, pageData) {
-    var pathname = req.pathname;
+function responseEjs(pathname, res, pageData) {
     var filepath = path.join(__dirname, 'source');
     var filepath = path.join(filepath, pathname);
     fs.exists(filepath, function(exists) {
@@ -102,14 +123,3 @@ function isStringEndBy(mainStr, endStr) {
     return true;
 }
 
-var ejs = require('ejs'),
-    users = ['geddy', 'neil', 'alex'];
-
-// Just one template 
-var str = ejs.render('<?= users.join(" | "); ?>', {
-    users: users
-}, {
-    delimiter: '?'
-});
-// => 'geddy | neil | alex' 
-console.log(str);
