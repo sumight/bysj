@@ -17,18 +17,17 @@ require([
 	plugStateMgr.registerPlug(listPlug)
 	plugStateMgr.registerPlug(defaultPlug)
 	plugStateMgr.registerPlug(tablePlug)
-	// plugStateMgr.registerPlug(commentPlug)
 
 	// 注册内联插件
-	plugStateMgr.registerInnerPlug(commentPlug)
+	// plugStateMgr.registerInnerPlug(commentPlug)
 	
 	// 指定起始插件
 	plugStateMgr.setState(defaultPlug.plugName);
 	// 指定默认插件
 	plugStateMgr.defaultPlug = defaultPlug;
 	// 对编辑器的键盘事件进行导流
-	var editorArea = document.getElementById('editor_area');
-	editorArea.addEventListener('keydown',function(event){
+	var $editorAreas = $(".editor_area");
+	$(document).on('keydown','.editor_area',function(event){
 		// 对内联插件做出反应
 		// 是否传递到Block插件进行处理
 		var isGoToBlockPlug = true;
@@ -42,16 +41,35 @@ require([
 			plugStateMgr.plugsMap[plugStateMgr.getState()].actForKey(event);
 		}
 		// 编辑器的功能快捷键
-		actForShortcutKey(event);
+		actForShortcutKey(event);		
 	})
+	// editorArea.addEventListener('keydown',function(event){
+	// 	// 对内联插件做出反应
+	// 	// 是否传递到Block插件进行处理
+	// 	var isGoToBlockPlug = true;
+	// 	if(plugStateMgr.innerPlugsMap[plugStateMgr.innerState]){
+	// 		// 如果存在对应的内联插件
+	// 		isGoToBlockPlug = plugStateMgr.innerPlugsMap[plugStateMgr.innerState].actForKey(event);
+	// 	}
+	// 	// 对应的插件做出对应的反应
+	// 	if(isGoToBlockPlug){
+	// 		// 没有内联插件，isGoToBlockPlug的默认值为true
+	// 		plugStateMgr.plugsMap[plugStateMgr.getState()].actForKey(event);
+	// 	}
+	// 	// 编辑器的功能快捷键
+	// 	actForShortcutKey(event);
+	// })
 
 	// 对内联插件的工作范围进行重新定向
-	editorArea.addEventListener("keyup",function(event){
+	$(document).on('keyup','.editor_area',function(event){
 		plugStateMgr.plugsMap[plugStateMgr.getState()].leave('skipinner');
 	})
+	// editorArea.addEventListener("keyup",function(event){
+	// 	plugStateMgr.plugsMap[plugStateMgr.getState()].leave('skipinner');
+	// })
 	// 处理鼠标点击事件
-	var editorArea = document.getElementById("editor_area");
-	editorArea.addEventListener('click',function(event){
+
+	$(document).on('click','.editor_area',function(event){
 		if(plugStateMgr.innerPlugsMap[plugStateMgr.innerState]){
 			plugStateMgr.innerPlugsMap[plugStateMgr.innerState].leave('skipinner');
 		}else{
@@ -59,4 +77,12 @@ require([
 		}
 		plugStateMgr.plugsMap[plugStateMgr.getState()].leave('skip');
 	})
+	// editorArea.addEventListener('click',function(event){
+	// 	if(plugStateMgr.innerPlugsMap[plugStateMgr.innerState]){
+	// 		plugStateMgr.innerPlugsMap[plugStateMgr.innerState].leave('skipinner');
+	// 	}else{
+	// 		plugStateMgr.redispatchDuty(true);
+	// 	}
+	// 	plugStateMgr.plugsMap[plugStateMgr.getState()].leave('skip');
+	// })
 })

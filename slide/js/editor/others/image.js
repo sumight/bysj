@@ -1,6 +1,6 @@
 define(['./util.js'],function(util){
 	//最大的编辑区域
-	var editor = document.getElementById('editor_area');
+	var $editorAreas = $('.editor_area');
 	//被选中的img
 	var selectedImg = null;
 	
@@ -12,7 +12,7 @@ define(['./util.js'],function(util){
 	//图片事件
 	(function(){
 		//添加事件代理，选中一个img元素
-		editor.addEventListener('mousedown',function(event){
+		$(document).on('mousedown','.editor_area',function(event){
 			var target = event.target;
 			if(target.dataset.imgType === 'inline-img'){
 				//如果点击了图片
@@ -38,6 +38,33 @@ define(['./util.js'],function(util){
 				}
 			}
 		})
+		// editor.addEventListener('mousedown',function(event){
+		// 	var target = event.target;
+		// 	if(target.dataset.imgType === 'inline-img'){
+		// 		//如果点击了图片
+		// 		var img = target;
+		// 		var imgWrap = getImgWrap();
+		// 		if(imgWrap){
+		// 			//如果有图片被选中
+		// 			//解除被选中的图片
+		// 			unWrapImg(imgWrap);
+		// 		}
+		// 		//给当前被选图片加上外壳
+		// 		wrapImg(img);
+		// 		focusImg(getImgWrap());
+		// 	}else if(target.className=='scale_handle'){
+				
+		// 	}else{
+		// 		//如果没有点击图片
+		// 		var imgWrap = getImgWrap();
+		// 		if(imgWrap){
+		// 			//如果有图片被选中
+		// 			//解除被选中的图片
+		// 			unWrapImg(imgWrap);
+		// 		}
+		// 	}
+		// })
+
 		//调节图片大小
 		
 		//鼠标的起始位置

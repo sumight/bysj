@@ -102,6 +102,7 @@ define(['./plug.js',"../others/util.js"],function(Plug,util){
 	*/
 	HeadingPlug.prototype.isCharge = function(){
 		var theFocus = util.getFocusElement();
+		if(!theFocus) return false;
 		// theFocus的tagName 如果不在h1~h6之间 返回false;
 		if(theFocus.tagName.charAt(0) != "H" || (theFocus.tagName.charAt(2)<=6 && theFocus.tagName.charAt(2)>=1)) return false;
 		if(theFocus.parentNode.tagName != "SECTION") return false;
@@ -231,7 +232,8 @@ define(['./plug.js',"../others/util.js"],function(Plug,util){
 	*/
 	function addSameLevelHeading(){
 		// 最外面的section
-		var editor = document.getElementById("editor_area");
+		var theFocusElement = util.getFocusElement();
+		var editor = $(theFocusElement).closest(".editor_area").get(0);
 		// 获取当前焦点所在的section
 		var section = util.getFocusElement().parentNode;
 		// 判断是否为顶级标题
