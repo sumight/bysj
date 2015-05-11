@@ -150,8 +150,8 @@ function refreshLessonDocListOfTeacher(userId, lessonId) {
  * @param {String} data 课堂ID
  */
 function updateLessonDocListOfTeacher(data) {
-    var $itemOfCourseContent = $('#course-content-doc').first();
-    var $itemOfCoursePPT = $('#course-ppt-doc').first();
+    var $itemOfCourseContent = $('#lesson-content-doc').first();
+    var $itemOfCoursePPT = $('#lesson-ppt-doc').first();
     var $otherDocList = $('#other-doc-list');
     var docSummary = data;
     $otherDocList.html('');
@@ -246,33 +246,44 @@ function refreshDocPutOfMonitor(userId, lessonId) {
  * @param {DocSummary} data
  */
 function updateDocPutOfMonitor(data) {
-    var docSummary = data;
-    var $docPutBox = $('#doc-put-box');
-    $docPutBox.html('');
-    var groups = groupDocByTag(docSummary);
-    for(var key in groups){
-        var group = groups[key];
-        $tag = $('<div class="col-xs-12"><hr><p class="doc-label">'+key+'</p></div>');
-        $docPutBox.append($tag);
-        for(var key1 in group){
-            var docBrief = group[key1];
-            $item = $('<div class="col-xs-4"><a href="javascript:void(0)"><div class="panel panel-default doc-ico"><div class="panel-body">'+docBrief.docTitle+'</div></div></a></div>')
-            $item.find('a').first().data('model',docBrief);
-            $docPutBox.append($item);
+        var docSummary = data;
+        var $docPutBox = $('#doc-put-box');
+        $docPutBox.html('');
+        var groups = groupDocByTag(docSummary);
+        for (var key in groups) {
+            var group = groups[key];
+            $tag = $('<div class="col-xs-12"><hr><p class="doc-label">' + key + '</p></div>');
+            $docPutBox.append($tag);
+            for (var key1 in group) {
+                var docBrief = group[key1];
+                $item = $('<div class="col-xs-4"><a href="javascript:void(0)"><div class="panel panel-default doc-ico"><div class="panel-body">' + docBrief.docTitle + '</div></div></a></div>')
+                $item.find('a').first().data('model', docBrief);
+                $docPutBox.append($item);
+            }
         }
     }
-}
-/**
-* 将docSummary按照标签分组
-* @function groupDocByTag
-* @param {DocSummary} docSummary
-* @returns {Groups}
-*/
-function groupDocByTag(docSummary){
+    /**
+     * 将docSummary按照标签分组
+     * @function groupDocByTag
+     * @param {DocSummary} docSummary
+     * @returns {Groups}
+     */
+function groupDocByTag(docSummary) {
     var groups = {}
-    for(var key in docSummary){
+    for (var key in docSummary) {
         var docBrief = docSummary[key];
-        if(groups[docBrief.tag]===undefined){
+        if (groups[docBrief.tag] === undefined) {
+            groups[docBrief.tag] = [];
+        }
+        groups[docBrief.tag].push(docBrief);
+    }
+    return groups;
+}
+function groupDocByTag1(docSummary) {
+    var groups = {}
+    for (var key in docSummary) {
+        var docBrief = docSummary[key];
+        if (groups[docBrief.tag] === undefined) {
             groups[docBrief.tag] = [];
         }
         groups[docBrief.tag].push(docBrief);
@@ -376,5 +387,20 @@ function updateCourseDocListOfStudent(data, docFrom) {
             $docListOfStudent.append($item);
         }
         return;
+    }
+}
+
+/*for lesson of student*/
+
+function main($scope, $http) {
+    var url = '/document'
+    $http.get(url).success(function(response) {
+        $scope.data = response;
+    })
+
+    $scope.refreshAll = function(){
+        $http.get(url).success(function(response) {
+            $scope.data = response;
+        })
     }
 }

@@ -43,30 +43,13 @@ require([
 		// 编辑器的功能快捷键
 		actForShortcutKey(event);		
 	})
-	// editorArea.addEventListener('keydown',function(event){
-	// 	// 对内联插件做出反应
-	// 	// 是否传递到Block插件进行处理
-	// 	var isGoToBlockPlug = true;
-	// 	if(plugStateMgr.innerPlugsMap[plugStateMgr.innerState]){
-	// 		// 如果存在对应的内联插件
-	// 		isGoToBlockPlug = plugStateMgr.innerPlugsMap[plugStateMgr.innerState].actForKey(event);
-	// 	}
-	// 	// 对应的插件做出对应的反应
-	// 	if(isGoToBlockPlug){
-	// 		// 没有内联插件，isGoToBlockPlug的默认值为true
-	// 		plugStateMgr.plugsMap[plugStateMgr.getState()].actForKey(event);
-	// 	}
-	// 	// 编辑器的功能快捷键
-	// 	actForShortcutKey(event);
-	// })
+
 
 	// 对内联插件的工作范围进行重新定向
 	$(document).on('keyup','.editor_area',function(event){
 		plugStateMgr.plugsMap[plugStateMgr.getState()].leave('skipinner');
 	})
-	// editorArea.addEventListener("keyup",function(event){
-	// 	plugStateMgr.plugsMap[plugStateMgr.getState()].leave('skipinner');
-	// })
+
 	// 处理鼠标点击事件
 
 	$(document).on('click','.editor_area',function(event){
@@ -77,12 +60,4 @@ require([
 		}
 		plugStateMgr.plugsMap[plugStateMgr.getState()].leave('skip');
 	})
-	// editorArea.addEventListener('click',function(event){
-	// 	if(plugStateMgr.innerPlugsMap[plugStateMgr.innerState]){
-	// 		plugStateMgr.innerPlugsMap[plugStateMgr.innerState].leave('skipinner');
-	// 	}else{
-	// 		plugStateMgr.redispatchDuty(true);
-	// 	}
-	// 	plugStateMgr.plugsMap[plugStateMgr.getState()].leave('skip');
-	// })
 })

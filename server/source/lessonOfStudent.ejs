@@ -25,18 +25,21 @@
         <input type="text" placeholder='课堂标题' id="lesson-title" value="<%= lessonTitle%>">
         <input type="text" placeholder='课堂概述' id="lesson-summary" value="<%= summary%>">
         <div class="row">
-            <div class="col-xs-3 sider list-box" id="lesson-list-box">
-                <div class="list-group" id="important-doc-list">
+            <div class="col-xs-3 sider list-box">
+                <div class="list-group" id="important-doc-list" >
                     <a class="list-group-item" href="javascript:void(0)" id="lesson-content-doc">课堂内容</a>
                     <a class="list-group-item" href="javascript:void(0)" id="lesson-ppt-doc">演示文稿</a>
+                    <a class="list-group-item" href="javascript:void(0)" id="lesson-note" ng-click='refreshAll()'>课堂笔记{{data.doc.docTitle}}</a>
                 </div>
-                <div class="list-group" id="other-doc-list">
-                    <a class="list-group-item" href="javascript:void(0)" ng-repeat='docBrief in data.docSummary'>
-                        <p class="doc-name hide-text">{{docBrief.docTitle}}</p>
-                        <span class='doc-update-time'>{{docBrief.updateDate | date:"yyyy/MM/dd"}}</span>
-                        <span class='doc-tag badge'>{{docBrief.tag}}</span>
-                    </a>
-                    <a class="list-group-item add-item">+</a>
+                <div class="list-box" id="lesson-list-of-student">
+                    <div class="list-group" id="other-doc-list">
+                        <a class="list-group-item" href="javascript:void(0)" ng-repeat='docBrief in data.docSummary'>
+                            <p class="doc-name hide-text">{{docBrief.docTitle}}</p>
+                            <span class='doc-update-time'>{{1430227530214 | date:"yyyy/MM/dd"}}</span>
+                            <span class='doc-tag badge'>{{docBrief.tag}}</span>
+                        </a>
+                        <a class="list-group-item add-item">+</a>
+                    </div>
                 </div>
             </div>
             <div class="col-xs-9 main"></div>

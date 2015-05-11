@@ -183,7 +183,9 @@ h2#lesson-title {
     height: 450px;
     overflow-y: auto;
 }
-
+#lesson-list-of-student{
+    height: 280px;
+}
 .doc-ico div {
     white-space: nowrap;
     overflow: hidden;
@@ -198,7 +200,12 @@ a:hover .lesson-ico {
 .doc-name {
     margin: 0;
 }
-
+.doc-tag{
+    display: block;
+    position: absolute;
+    top: 31px;
+    right: 19px;
+}
 .doc-update-time {
     font-family: serif;
     font-size: 10px;

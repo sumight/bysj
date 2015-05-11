@@ -9,8 +9,7 @@ var app = require('./express.js'),
 
 app.post('/document', function(req, res) {
     var params = req.body;
-    res.write('params: ' + params);
-    res.end(JSON.stringify(data.doc));
+    res.end(JSON.stringify(data));
 })
 
 app.post('/user/name', function(req, res) {
@@ -36,6 +35,14 @@ app.post('/lessonOfTeacher.ejs',function(req,res){
     * 查询出lesson对象
     */
     responseEjs(req.pathname,res,{lessonId:lessonId,lessonTitle:'化学的原理（假数据）',summary:'化学原理简洁（假数据）'});
+})
+app.post('/lessonOfStudent.ejs',function(req,res){
+    var lessonId = req.query.lessonId;
+    /**
+    * 从数据库中
+    * 查询出lesson对象
+    */
+    responseEjs(req.pathname,res,{lessonId:lessonId,lessonTitle:'化学的原理（假数据,学生端）',summary:'化学原理简洁（假数据，学生端口）'});
 })
 app.post('/createLesson',function(req,res){
     var courseId = req.query.courseId;
