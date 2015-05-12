@@ -146,7 +146,11 @@ function data(data){
 * @returns {Object} 控制器对象
 */
 function loadControllers(ctrlsPath){
-    
+    var dirArray = fs.readdir(ctrlsPath);
+    for(var key in dirArray){
+        var dir = dirArray[key];
+        
+    }
 }
 
 exports.controllers = controllers;
