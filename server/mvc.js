@@ -146,10 +146,18 @@ function data(data){
 * @returns {Object} 控制器对象
 */
 function loadControllers(ctrlsPath){
-    var dirArray = fs.readdir(ctrlsPath);
+    var dirArray = fs.readdirSync(ctrlsPath);
+    console.log(dirArray)
     for(var key in dirArray){
         var dir = dirArray[key];
-        dddaaa
+        var stats = fs.statSync(path.join(ctrlsPath,dir));
+        if(stats.isDirectory()){
+            controllers[dir]={};
+        }
+        if(stats.isFile()){
+            controllers.
+        }
+        console.log(stats);
     }
 }
 
@@ -164,3 +172,4 @@ exports.server = server;
 //     return data(params);
 // }
 // server.listen(4000);
+loadControllers(path.join(__dirname, 'controllers'));
