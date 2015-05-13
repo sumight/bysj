@@ -146,19 +146,31 @@ function data(data){
 * @returns {Object} 控制器对象
 */
 function loadControllers(ctrlsPath){
-    var dirArray = fs.readdirSync(ctrlsPath);
-    console.log(dirArray)
-    for(var key in dirArray){
-        var dir = dirArray[key];
-        var stats = fs.statSync(path.join(ctrlsPath,dir));
+    var itemArray = fs.readdirSync(ctrlsPath);
+    for(var key in itemArray){
+        var stats = fs.statSync(path.join(ctrlsPath,itemArray[key]));
+        var itemPathname = path.join(ctrlsPath,itemArray[key]);
         if(stats.isDirectory()){
             controllers[dir]={};
         }
         if(stats.isFile()){
+            itemPathname = itemPathname.replace(/\.js$/,'');
             controllers.
         }
         console.log(stats);
     }
+}
+
+/**
+* 用路径访问js对象
+* @function visitByPath
+* @param {Object} obj 被访问的对象
+* @param {String} pathname 路径
+* @param {Object} value 赋值给目标对象的对象
+* @returns {Object} 访问以后的结果
+*/
+function visitByPath(obj, pathname, value){
+    
 }
 
 exports.controllers = controllers;
