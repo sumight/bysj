@@ -149,7 +149,7 @@ function loadControllers(ctrlsPath){
     var dirArray = fs.readdir(ctrlsPath);
     for(var key in dirArray){
         var dir = dirArray[key];
-        ddd
+        dddaaa
     }
 }
 
