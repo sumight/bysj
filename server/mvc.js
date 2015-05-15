@@ -150,27 +150,39 @@ function loadControllers(ctrlsPath){
     for(var key in itemArray){
         var stats = fs.statSync(path.join(ctrlsPath,itemArray[key]));
         var itemPathname = path.join(ctrlsPath,itemArray[key]);
-        if(stats.isDirectory()){
-            controllers[dir]={};
-        }
         if(stats.isFile()){
             itemPathname = itemPathname.replace(/\.js$/,'');
-            controllers.
+            console.log(itemPathname)
+            console.log(itemPathname.replace(/^.*\\controllers\\/,""));
+            // addValueByPath(controllers,)
         }
-        console.log(stats);
     }
 }
 
 /**
 * 用路径访问js对象
-* @function visitByPath
+* @function addValueByPath
 * @param {Object} obj 被访问的对象
 * @param {String} pathname 路径
 * @param {Object} value 赋值给目标对象的对象
 * @returns {Object} 访问以后的结果
 */
-function visitByPath(obj, pathname, value){
-    
+function addValueByPath(obj, pathname, value){
+    var names = pathname.split('/');
+    names.shift();
+    var subObj = obj;
+
+    for(key in names){
+        var name = names[key];
+        if(subObj[name] === undefined){
+            subObj[name] = {}
+        }
+        if(key == (names.length-1)){
+            subObj[name] = value;
+        }
+        subObj = subObj[name];
+    }
+    return obj;
 }
 
 exports.controllers = controllers;
@@ -185,3 +197,6 @@ exports.server = server;
 // }
 // server.listen(4000);
 loadControllers(path.join(__dirname, 'controllers'));
+
+// var abcd = addValueByPath({a:{b:{}}},'/a/b/c/d/e/f/g',123);
+// console.log(abcd.a.b.c.d.e.f,abcd);
