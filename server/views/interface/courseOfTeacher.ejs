@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-CN" class=" evernoteSafari">
+<html lang="zh-CN">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Blog Template for Bootstrap</title>
-    <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <title>教师课堂页面</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 
 <body ng-app ng-controller='main'>
@@ -90,14 +90,13 @@
     </div>
     <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src='./js/angular.js'></script>
-    <script type="text/javascript" src='./js/refresh.js'></script>
-    <script type="text/javascript" src='./js/test.js'></script>
+    <script type="text/javascript" src='/js/angular.js'></script>
+    <script type="text/javascript" src='/js/refresh.js'></script>
+    <script type="text/javascript" src='/js/test.js'></script>
     <script type="text/javascript">
         var userId = '<%= userId %>';
         function checkCourseList($scope, $http) {
             var url = '';
-
             url = '/user/course_summary'+'?user_id='+userId;
             $http.get(url).success(function(response) {
                 $scope.data.courseSummary = response;
