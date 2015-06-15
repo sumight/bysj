@@ -1,3 +1,15 @@
+var document = {
+    docTitle:'ab',
+    content:'bb',
+    type:'1',
+    shareType:"2",
+    tags:'',
+    lessonId:'',
+    courseId:'',
+    userId:'',
+    createDate:new Date(),
+    updateDate:new Date()
+}
 var data = {
         docSummary: [{
             _id: '234567',

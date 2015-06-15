@@ -5,50 +5,156 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Blog Template for Bootstrap</title>
-    <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/editorStyle.css">
 </head>
 
 <body ng-app ng-controller='main'>
-    <div class="header">
+    <div class="header purple">
         <div class="container">
             <nav class="nav">
-                <a class="nav-item" href="/courseOfTeacher.ejs">主页</a>
-                <a class="nav-item active" href="/lessonOfTeacher.ejs">课堂编辑</a>
-                <a class="nav-item" href="/monitor.ejs">监视器</a>
-                <a class="nav-item" href="#">New hires</a>
-                <a class="nav-item" href="#">About</a>
+                <a class="nav-item" href="/interface/courseOfTeacher">主页</a>
+                <a class="nav-item active" href="javascript:void(0)">课堂编辑</a>
+                <a class="nav-item" href="/interface/monitor">监视器</a>
             </nav>
         </div>
     </div>
     <div class="container">
-        <input type="text" placeholder='课堂标题' id="lesson-title" value="<%= lessonTitle%>">
+        <input type="text" placeholder='课堂标题' id="lesson-title" value="<%= lessonTitle%>" ng-click="saveDocument();saveLessonInfo();">
         <input type="text" placeholder='课堂概述' id="lesson-summary" value="<%= summary%>">
         <div class="row">
             <div class="col-xs-3 sider list-box" id="lesson-list-box">
                 <div class="list-group" id="important-doc-list">
-                    <a class="list-group-item" href="javascript:void(0)" id="lesson-content-doc">课堂内容</a>
-                    <a class="list-group-item" href="javascript:void(0)" id="lesson-ppt-doc">演示文稿</a>
+                    <a class="list-group-item" href="javascript:void(0)" id="lesson-content-doc" ng-repeat='docBrief in data.docSummary | filter: "课堂内容"' ng-click='clickDocList(docBrief)'>课堂内容</a>
+                    <a class="list-group-item" href="javascript:void(0)" id="lesson-ppt-doc" ng-repeat='docBrief in data.docSummary | filter: "演示文稿"' ng-click='clickDocList(docBrief)'>演示文稿</a>
                 </div>
                 <div class="list-group" id="other-doc-list">
-                    <a class="list-group-item" href="javascript:void(0)" ng-repeat='docBrief in data.docSummary'>
+                    <a class="list-group-item add-item" ng-click="clickToAddDocument()">+</a>
+                    <a class="list-group-item" href="javascript:void(0)" ng-repeat='docBrief in data.docSummary | filter: "一般"' ng-click='clickDocList(docBrief)'>
                         <p class="doc-name hide-text">{{docBrief.docTitle}}</p>
                         <span class='doc-update-time'>{{docBrief.updateDate | date:"yyyy/MM/dd"}}</span>
                         <span class='doc-tag badge'>{{docBrief.tag}}</span>
                     </a>
-                    <a class="list-group-item add-item">+</a>
                 </div>
             </div>
-            <div class="col-xs-9 main"></div>
+            <div class="col-xs-9 editor-box">
+                <section class="editor_area" data-headingmodel="false">
+                </section>
+            </div>
         </div>
     </div>
     <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src='./js/angular.js'></script>
-    <script type="text/javascript" src='./js/refresh.js'></script>
-    <script type="text/javascript" src='./js/test.js'></script>
+    <script type="text/javascript" src='/js/angular.js'></script>
+    <script type="text/javascript" src='/js/public.js'></script>
+    <script type="text/javascript" src='/js/test.js'></script>
+    <script src='/js/require.js' data-main='/js/editor/main.js'></script>
     <script type="text/javascript">
-        var lessonId = '<%=  lessonId%>';
+    function main($scope, $http) {
+        $scope.data = {};
+        $scope.data.lessonId = document.location.search.split('=')[1];
+        var lessonId = $scope.data.lessonId;
+
+        refresh()
+
+        function refresh() {
+            $http.get("/ajax/getDocsOfLesson?lessonId=" + $scope.data.lessonId).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    $scope.data.docSummary = response.data;
+                    for(var key in $scope.data.docSummary){
+                        var doc = $scope.data.docSummary[key];
+                        if(doc.type === '课堂内容'){
+                            $scope.clickDocList(doc);
+                            break;
+                        }
+                    }
+                } else {
+                    alert(response.message);
+                }
+            })
+        }
+
+
+        $scope.clickToAddDocument = function() {
+                $http.get("/ajax/addLessonDocument?lessonId=" + $scope.data.lessonId).success(function(response) {
+                    if (response.status === 'ok') {
+                        console.log(response);
+                        refresh();
+                    } else {
+                        alert(response.message);
+                    }
+                })
+            }
+            /**
+             * 点击课程文档列表触发的函数，用来刷新文档编辑页面
+             * @function clickDocList
+             * @param {String} docId 文档的id
+             */
+        $scope.clickDocList = function(docBrief) {
+                var docId = docBrief._id; 
+                $http.get("/ajax/getDocument?docId=" + docId).success(function(response) {
+                    if (response.status === 'ok') {
+                        console.log(response);
+                        $scope.data.document = response.data;
+                        document.getElementsByClassName("editor_area")[0].innerHTML = response.data.content;
+                        $scope.data.currentDocId = response.data._id;
+                        $scope.data.currentDocBrief = docBrief;
+                    } else {
+                        alert(response.message);
+                    }
+                })
+            }
+            /**
+             * 保存一个文档
+             * @function saveDocument
+             * @param {String} docId 当前要保存的文档的id
+             * @param {String} docTitle 文档的标题
+             * @param {String} content 文档的内容
+             */
+        $scope.saveDocument = function() {
+            if (!document.getElementById('h1')) return;
+            var docId = $scope.data.currentDocId;
+            var docTitle = document.getElementById('h1').innerText;
+            var content = document.getElementsByClassName('editor_area')[0].innerHTML;
+
+            $http.post("/ajax/updateDocumentContent", {
+                docId: docId,
+                docTitle: docTitle,
+                content: content
+            }).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    $scope.data.currentDocBrief.docTitle = docTitle;
+                } else {
+                    alert(response.message);
+                }
+            })
+        }
+
+        $scope.saveLessonInfo = function() {
+                var lessonId = $scope.data.lessonId;
+                var lessonTitle = document.getElementById('lesson-title').value;
+                var summary = document.getElementById('lesson-summary').value;
+
+                $http.post("/ajax/saveLessonInfo", {
+                    lessonId: lessonId,
+                    lessonTitle: lessonTitle,
+                    summary: summary
+                }).success(function(response) {
+                    if (response.status === 'ok') {
+                        console.log(response);
+                    } else {
+                        alert(response.message);
+                    }
+                })
+            }
+            // 文档保存触发器注册
+        docSaveTrigger(window, function() {
+            $scope.saveDocument();
+        })
+    }
     </script>
 </body>
 

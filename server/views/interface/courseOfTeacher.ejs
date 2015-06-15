@@ -7,17 +7,16 @@
     <title>教师课堂页面</title>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/editorStyle.css">
 </head>
 
 <body ng-app ng-controller='main'>
-    <div class="header">
+    <div class="header purple">
         <div class="container">
             <nav class="nav">
-                <a class="nav-item active" href="/courseOfTeacher.ejs">主页</a>
-                <a class="nav-item" href="/lessonOfTeacher.ejs">课堂编辑</a>
-                <a class="nav-item" href="/monitor.ejs">监视器</a>
-                <a class="nav-item" href="#">New hires</a>
-                <a class="nav-item" href="#">About</a>
+                <a class="nav-item active" href="/interface/courseOfTeacher">主页</a>
+                <a class="nav-item" href="/interface/monitor">监视器</a>
+                <a class="nav-item btn-login" href="./login">登录</a>
             </nav>
         </div>
     </div>
@@ -25,43 +24,43 @@
         <div class="row">
             <div class="col-xs-2 sider list-box" id="course-list-box">
                 <div class="list-group">
-                    <a class="list-group-item" href="javascript:void(0)" ng-repeat='courseBrief in data.courseSummary'>
-                        {{courseBrief.courseName}}
-                    </courseBrief></a>
+                    <a class="list-group-item" href="javascript:void(0)" ng-repeat='course in data.courses' ng-click='clickCourseList(course)'>
+                        {{course.courseName}}
+                    </a>
                 </div>
             </div>
             <div class="col-xs-10 main">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h2 id="course-name">化学课</h2>
+                        <h2 id="course-name" ng-click="saveDocument()">{{data.currentCourse.courseName}}</h2>
                     </div>
                 </div>
                 <div role="tabpanel">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#course-part" aria-controls="profile" role="tab" data-toggle="tab">课堂</a></li>
-                        <li role="presentation" ><a href="#doc-part" aria-controls="home" role="tab" data-toggle="tab">文档</a></li>
+                        <li role="presentation"><a href="#doc-part" aria-controls="home" role="tab" data-toggle="tab">文档</a></li>
                     </ul>
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="course-part">
                             <div class="row" id="lesson-put-box">
-                                <div class="col-xs-4" ng-repeat='lessonBrief in data.lessonSummary'>
+                                <div class="col-xs-4">
                                     <a href="javascript:void(0)">
-                                        <div class="panel panel-default lesson-ico">
-                                            <div class="panel-heading">
-                                                <h3 class="panel-title">{{lessonBrief.lessonTitle}}</h3>
-                                            </div>
-                                            <div class="panel-body">
-                                                {{lessonBrief.summary}}
-                                            </div>
+                                        <div class="panel panel-default lesson-ico add-lesson" ng-click='clickToAddLesson(data.currentCourse)'>
+                                            +
                                         </div>
                                     </a>
                                 </div>
-                                <div class="col-xs-4">
-                                    <a href="javascript:void(0)">
-                                        <div class="panel panel-default lesson-ico add-lesson">
-                                            +
+                                <div class="col-xs-4" ng-repeat='lesson in data.lessons'>
+                                    <a href="javascript:void(0)" ng-click='openLessonPage(lesson._id)'>
+                                        <div class="panel panel-default lesson-ico">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title">{{lesson.lessonTitle}}</h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                {{lesson.summary}}
+                                            </div>
                                         </div>
                                     </a>
                                 </div>
@@ -71,15 +70,17 @@
                             <div class="row">
                                 <div class="col-xs-3 list-box sider" id="course-doc-list-box">
                                     <div class="list-group">
-                                        <a class="list-group-item" href="javascript:void(0)" ng-repeat='docBrief in data.docSummary'>
+                                        <a class="list-group-item add-item" ng-click='clickToAddDocument(data.currentCourse)'>+</a>
+                                        <a class="list-group-item" href="javascript:void(0)" ng-repeat='docBrief in data.docSummary' ng-click='clickDocList(docBrief)'>
                                             <p class="doc-name hide-text">{{docBrief.docTitle}}</p>
                                             <span class='doc-update-time'>{{docBrief.updateDate | date:"yyyy/MM/dd"}}</span>
                                             <span class='doc-tag badge'>{{docBrief.tag}}</span>
                                         </a>
-                                        <a class="list-group-item add-item">+</a>
                                     </div>
                                 </div>
-                                <div class="col-xs-9 main">
+                                <div class="col-xs-9 editor-box">
+                                    <section class="editor_area" data-headingmodel="false">
+                                    </section>
                                 </div>
                             </div>
                         </div>
@@ -91,28 +92,145 @@
     <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src='/js/angular.js'></script>
-    <script type="text/javascript" src='/js/refresh.js'></script>
+    <script type="text/javascript" src='/js/public.js'></script>
     <script type="text/javascript" src='/js/test.js'></script>
+    <script src='/js/require.js' data-main='/js/editor/main.js'></script>
     <script type="text/javascript">
-        var userId = '<%= userId %>';
-        function checkCourseList($scope, $http) {
-            var url = '';
-            url = '/user/course_summary'+'?user_id='+userId;
-            $http.get(url).success(function(response) {
-                $scope.data.courseSummary = response;
+    function main($scope, $http) {
+        $scope.data = {};
+        $http.get("/ajax/getCourseOfTeacher").success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    $scope.data.courses = response.data;
+                    // 默认呈现第一个课程
+                    if($scope.data.courses.length > 0)
+                        $scope.clickCourseList($scope.data.courses[0]);
+                } else {
+                    alert(response.message);
+                    document.location = './login';
+                }
             })
-
-            url = '/user/course_summary'+'?user_id='+userId;
-            $http.get(url).success(function(response) {
-                $scope.data.courseSummary = response;
+            /**
+             * 点击课程列表触发的函数，用来刷新课堂列表,和课程文档列表
+             * @function clickCourseList
+             * @param course 课程的id
+             */
+        $scope.clickCourseList = function(course) {
+            $scope.data.currentCourse = course;
+            $http.get("/ajax/getLessonOfCourse?courseId=" + course._id).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    $scope.data.lessons = response.data;
+                } else {
+                    alert(response.message);
+                }
             })
-
-            $scope.refreshAll = function(){
-                $http.get(url).success(function(response) {
-                    $scope.data = response;
-                })
-            }
+            $http.get("/ajax/getDocSummaryOfCourse?courseId=" + course._id).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    $scope.data.docSummary = response.data;
+                    // 默认呈现第一个文档
+                    if($scope.data.docSummary.length > 0)
+                        $scope.clickDocList($scope.data.docSummary[0]);
+                } else {
+                    alert(response.message);
+                }
+            })
         }
+
+        /**
+         * 点击课程文档列表触发的函数，用来刷新文档编辑页面
+         * @function clickDocList
+         * @param {String} docId 文档的id
+         */
+        $scope.clickDocList = function(docBrief) {
+            var docId = docBrief._id;
+            $http.get("/ajax/getDocument?docId=" + docId).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    $scope.data.document = response.data;
+                    document.getElementsByClassName("editor_area")[0].innerHTML = response.data.content;
+                    $scope.data.currentDocId = response.data._id;
+                    $scope.data.currentDocBrief = docBrief;
+                } else {
+                    alert(response.message);
+                }
+            })
+        }
+
+        /**
+         * 点击添加一个课堂
+         * @function clickToAddLesson
+         * @param course 当前选中的课程id
+         */
+        $scope.clickToAddLesson = function(course) {
+            console.log(course)
+            $http.get("/ajax/addLesson?courseId=" + course._id).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    $scope.clickCourseList(course);
+                } else {
+                    alert(response.message);
+                }
+            })
+        }
+
+        /**
+         * 点击添加一个课程文档
+         * @function clickToAddDocument
+         * @param  course 当前选中的课程id
+         */
+        $scope.clickToAddDocument = function(course) {
+            $http.get("/ajax/addCourseDocument?courseId=" + course._id).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    $scope.clickCourseList(course);
+                } else {
+                    alert(response.message);
+                }
+            })
+        }
+
+        /**
+         * 保存一个文档
+         * @function saveDocument
+         * @param {String} docId 当前要保存的文档的id
+         * @param {String} docTitle 文档的标题
+         * @param {String} content 文档的内容
+         */
+        $scope.saveDocument = function() {
+            if (!document.getElementById('h1')) return;
+            var docId = $scope.data.currentDocId;
+            var docTitle = document.getElementById('h1').innerText;
+            var content = document.getElementsByClassName('editor_area')[0].innerHTML;
+
+            $http.post("/ajax/updateDocumentContent", {
+                docId: docId,
+                docTitle: docTitle,
+                content: content
+            }).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    $scope.data.currentDocBrief.docTitle = docTitle;
+                } else {
+                    alert(response.message);
+                }
+            })
+        }
+
+        /**
+         * 打开一个课堂页面
+         * @function openLessonPage
+         * @param {String} lessonId 要打开的课堂id
+         */
+        $scope.openLessonPage = function(lessonId) {
+                window.open('/interface/lessonOfTeacher?lessonId=' + lessonId);
+            }
+            // 文档保存触发器注册
+        docSaveTrigger(window, function() {
+            $scope.saveDocument();
+        })
+    }
     </script>
 </body>
 

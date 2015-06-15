@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class=" evernoteSafari">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Blog Template for Bootstrap</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/editorStyle.css">
+</head>
+
+<body ng-app ng-controller='main'>
+    <div class="header" ng-click='saveDocument()'>
+        <div class="container">
+            <nav class="nav">
+                <a class="nav-item" href="/interface/courseOfStudent">主页</a>
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="col-xs-12 editor-box">
+            <section class="editor_area" data-headingmodel="false">
+                <%= content%>
+            </section>
+        </div>
+    </div>
+    </div>
+    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src='/js/angular.js'></script>
+    <script type="text/javascript" src='/js/public.js'></script>
+    <script type="text/javascript" src='/js/test.js'></script>
+    <script src='/js/require.js' data-main='/js/editor/main.js'></script>
+    <script type="text/javascript">
+    function main($scope, $http) {
+        $scope.data = {};
+        $scope.data.docId = document.location.search.split('=')[1];
+
+        /**
+         * 保存一个文档
+         * @function saveDocument
+         * @param {String} docId 当前要保存的文档的id
+         * @param {String} docTitle 文档的标题
+         * @param {String} content 文档的内容
+         */
+        $scope.saveDocument = function() {
+            if (!document.getElementById('h1')) return;
+            var docId = $scope.data.docId
+            var docTitle = document.getElementById('h1').innerText;
+            var tags = docTitle.split(":")[1] || '';
+            var content = document.getElementsByClassName('editor_area')[0].innerHTML;
+            $http.post("/ajax/updateDocumentContent", {
+                docId: docId,
+                docTitle: docTitle,
+                content: content,
+                tags:tags
+            }).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                } else {
+                    alert(response.message);
+                }
+            })
+        }
+
+        // 文档保存触发器注册
+        docSaveTrigger(window, function() {
+            $scope.saveDocument();
+        })
+        
+        // 将文档内容转化为html
+        document.getElementsByClassName('editor_area')[0].innerHTML = document.getElementsByClassName('editor_area')[0].innerText;
+    }
+    </script>
+</body>
+
+</html>

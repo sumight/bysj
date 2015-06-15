@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Blog Template for Bootstrap</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+
+<body ng-app ng-controller='main'>
+    <div class="header">
+        <div class="container">
+            <nav class="nav">
+                <a class="nav-item" href="/interface/courseOfTeacher">主页</a>
+                <a class="nav-item" href="/interface/monitor">监视器</a>
+                <a class="nav-item btn-login active" href="./login">登录</a>
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <form class="form-signin login">
+            <h2 class="form-signin-heading">登录</h2>
+            <input type="text" class="form-control J_input-account" placeholder="学号 或者 工号">
+            <input type="password" class="form-control J_input-password" placeholder="密码">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="remember-me"> 记住密码
+                </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click='clickToLogin()'>登录</button>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click='clickToRegister()'>注册</button>
+        </form>
+        <form class="form-signin register">
+            <h2 class="form-signin-heading">注册</h2>
+            <input type="text" class="form-control J_input-account" placeholder="学号 或者 工号">
+            <input type="password" class="form-control J_input-password" placeholder="密码">
+            <input type="text" class="form-control J_input-username" placeholder="姓名">
+            <div class="radio">
+                <label>
+                    <input type="radio" name='type' id="J_input-typet" value="学生">学生
+                </label>
+                    &nbsp;
+                <label>
+                    <input type="radio" name='type' id="J_input-types" value="老师">老师
+                </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click='clickToRegister()'>注册</button>
+        </form>
+    </div>
+    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src='/js/angular.js'></script>
+    <script type="text/javascript" src='/js/public.js'></script>
+    <script type="text/javascript" src='/js/test.js'></script>
+    <script type="text/javascript">
+    function main($scope, $http) {
+        $scope.clickToLogin = function() {
+            var account = $('.login .J_input-account').val();
+            var password = $('.login .J_input-password').val();
+            var url = "/ajax/login?account=" + account + "&password=" + password;
+            $http.get(url).success(function(response) {
+                if (response.status === 'ok') {
+                    alert("欢迎回来 " + response.data.username);
+                    if(response.data.userType==='学生')
+                        document.location = '/interface/courseOfStudent';
+                    else
+                        document.location = '/interface/courseOfTeacher';
+                } else {
+                    alert("用户名或密码错误")
+                }
+            })
+        }
+        $scope.clickToRegister = function() {
+            var password = $('.register .J_input-password').val();
+            var username = $('.register .J_input-username').val();
+            var account = $('.register .J_input-account').val();
+            var userType = $('[name=type]').eq(0).get(0).checked?'学生':'老师';
+            var url = "/ajax/register?" + 
+                "username=" + username + 
+                "&password=" + password+ 
+                "&account=" + account+
+                "&userType=" + userType;
+            $http.get(url).success(function(response) {
+                if (response.status === 'ok') {
+                    alert("注册成功");
+                    if(userType==='学生')
+                        document.location = '/interface/courseOfStudent';
+                    else
+                        document.location = '/interface/courseOfTeacher';
+                } else {
+                    alert("注册失败，用户名重复");
+                }
+            })
+        }
+    }
+    </script>
+</body>
+
+</html>

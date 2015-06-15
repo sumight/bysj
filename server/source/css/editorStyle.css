@@ -1,0 +1,51 @@
+.editor_area{
+    min-height: 500px;
+    width: 100%;
+    max-width: 620px;
+    margin:0 auto;
+    position: relative;
+}
+
+.editor_area section[data-headingmodel='true'] :not(section):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6){
+    display: none;
+}
+.editor_area :focus{
+    outline: none;
+}
+.editor_area h1{
+    text-align: center;
+}
+.editor_area li > p{
+    margin: 0;
+}
+.editor_area table{
+    border-collapse: collapse;
+    width: 100%;
+}
+.editor_area td,.editor_area th{
+    border:1px solid black;
+}
+.editor_area .img_wrap{
+    
+    display: inline-block;
+    position: relative;
+}
+.editor_area .scale_handle{
+    height: 10px;
+    width: 10px;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    background-color: red;
+    display: inline-block;
+}
+.editor_area span.img_wrap{
+    outline: 3px solid gray;
+}
+.editor_area [data-img-adding='true']{
+    outline: 3px solid gray;
+}
+.editor_area div.comment-block{
+    position: absolute;
+    outline: 1px solid black;
+}

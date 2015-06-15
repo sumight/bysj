@@ -5,18 +5,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Blog Template for Bootstrap</title>
-    <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/style.css">
-    
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 
 <body ng-app ng-controller='main'>
-    <div class="header">
+    <div class="header purple">
         <div class="container">
             <nav class="nav">
-                <a class="nav-item" href="/courseOfTeacher.ejs">主页</a>
-                <a class="nav-item" href="/lessonOfTeacher.ejs">课堂编辑</a>
-                <a class="nav-item active" href="/monitor.ejs">监视器</a>
+                <a class="nav-item" href="/interface/courseOfTeacher">主页</a>
+                <a class="nav-item active" href="/interface/monitor">监视器</a>
             </nav>
         </div>
     </div>
@@ -24,90 +22,41 @@
         <div class="row">
             <div class="col-xs-3 sider list-box" id="course-list-box">
                 <div class="panel-group" id="accordion">
-                    <div class="panel panel-default" ng-repeat='courseBrief in data.courseSummaryWithLessonSummary'>
+                    <div class="panel panel-default" ng-repeat='course in data.courses'>
                         <div class="panel-heading" role="tab" id="headingOne">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
-                                    {{courseBrief.courseName}}
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{course._id}}" >
+                                    {{course.courseName}}
                                 </a>
                             </h4>
                         </div>
-                        <div id="collapse1" class="panel-collapse collapse">
+                        <div id="collapse{{course._id}}" class="panel-collapse collapse">
                             <div class="list-group">
-                                <a class="list-group-item" href="javascript:void(0)" ng-repeat='lessonBrief in courseBrief.lessonSummary'>{{lessonBrief.lessonTitle}}</a>
+                                <a class="list-group-item" href="javascript:void(0)" ng-repeat='lesson in course.lessons' ng-click='clickLessonList(lesson,course._id)'>{{lesson.lessonTitle}}</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-xs-9 main">
-                <h2 id="lesson-title">课堂标题</h2>
+                <h2 id="lesson-title">{{data.currentLesson.lessonTitle}}</h2>
                 <div class="row">
                     <div class="col-xs-3 list-box sider" id="student-list-box">
                         <div class="list-group">
-                            <a class="list-group-item" href="javascript:void(0)" ng-repeat='user in data.userSummary'>{{user.userName}}</a>
+                            <a class="list-group-item" href="javascript:void(0)" ng-repeat='student in data.students' ng-click='clickStudentList(student)'>{{student.username}}</a>
                         </div>
                     </div>
                     <div class="col-xs-9 main" id='doc-put-box'>
-                        <div class="row">
+                        <div class="row" ng-repeat='tag in data.tags'>
                             <div class="col-xs-12">
                                 <hr>
-                                <p class="doc-label">文档标签</p>
+                                <p class="doc-label">{{tag}}</p>
                             </div>
-                            <div class="col-xs-4">
-                                <a href="javascript:void(0)">
+                            <div class="col-xs-4" ng-repeat='doc in data.docsOfStudent | filter:tag '>
+                                <a href="javascript:void(0)" ng-click='openDocPage(doc._id)'>
                                     <div class="panel panel-default doc-ico">
                                         <div class="panel-body">
-                                            标准文档
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-xs-4">
-                                <a href="javascript:void(0)">
-                                    <div class="panel panel-default doc-ico">
-                                        <div class="panel-body">
-                                            标准文档
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-xs-4">
-                                <a href="javascript:void(0)">
-                                    <div class="panel panel-default doc-ico">
-                                        <div class="panel-body">
-                                            标准文档
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-xs-4">
-                                <a href="javascript:void(0)">
-                                    <div class="panel panel-default doc-ico">
-                                        <div class="panel-body">
-                                            标准文档
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-xs-12">
-                                <hr>
-                                <p class="doc-label">文档标签</p>
-                            </div>
-                            <div class="col-xs-4">
-                                <a href="javascript:void(0)">
-                                    <div class="panel panel-default doc-ico">
-                                        <div class="panel-body">
-                                            标准文档
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-xs-4">
-                                <a href="javascript:void(0)">
-                                    <div class="panel panel-default doc-ico">
-                                        <div class="panel-body">
-                                            标准文档
+                                            {{doc.docTitle}}
                                         </div>
                                     </div>
                                 </a>
@@ -118,14 +67,81 @@
             </div>
         </div>
     </div>
-
     <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src='./js/angular.js'></script>
-    <script src='./js/refresh.js'></script>
-    <script type="text/javascript" src='./js/test.js'></script>
+    <script type="text/javascript" src='/js/angular.js'></script>
+    <script src='/js/public.js'></script>
     <script type="text/javascript">
-        var userId = '<%= userId%>';
+    var ev = document.createEvent('HTMLEvents');
+    ev.initEvent('click', false, true);
+
+    function main($scope, $http) {
+        $scope.data = {}
+        $scope.data.currentLesson = null;
+        $http.get("/ajax/getCourseOfTeacherWithLessons").success(function(response) {
+            if (response.status === 'ok') {
+                console.log(response);
+                $scope.data.courses = response.data;
+                var courses = $scope.data.courses;
+
+                if (courses.length < 1) return;
+                if (courses[0].lessons.length < 1) return;
+                $scope.clickLessonList(courses[0].lessons[0], courses[0]._id);
+            } else {
+                alert(response.message);
+                document.location = './login';
+            }
+        })
+
+        $scope.clickLessonList = function(lesson, courseId) {
+            $scope.data.currentLesson = lesson;
+            $http.get("/ajax/getStudentByCourse?courseId=" + courseId).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    $scope.data.students = response.data;
+                    $scope.clickStudentList($scope.data.students[0])
+                } else {
+                    alert(response.message);
+                    document.location = './login';
+                }
+            })
+        }
+
+        /**
+         * 点击学生列表后触发的事件
+         * @function clickStudentList
+         * @param student 学生对象
+         */
+        $scope.clickStudentList = function(student) {
+                console.log(student);
+                $http.get("/ajax/getDocsOfStudent?studentId=" + student._id).success(function(response) {
+                    if (response.status === 'ok') {
+                        console.log(response);
+                        $scope.data.docsOfStudent = response.data;
+                        // 从document中提炼出tags
+                        $scope.data.tags = {}
+                        for (var key in $scope.data.docsOfStudent) {
+                            var doc = $scope.data.docsOfStudent[key];
+                            if (doc.tags === undefined || doc.tags === '' || doc.tags === null) continue;
+                            $scope.data.tags[doc.tags] = doc.tags;
+                        }
+                        console.log($scope.data.tags);
+                    } else {
+                        alert(response.message);
+                        document.location = './login';
+                    }
+                })
+            }
+            /**
+             * 打开一个课堂页面
+             * @function openDocPage
+             * @param docId 要打开的文档Id
+             */
+        $scope.openDocPage = function(docId) {
+            console.log('dd')
+            window.open('/interface/document?docId=' + docId);
+        }
+    }
     </script>
 </body>
 

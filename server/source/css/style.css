@@ -163,7 +163,7 @@ a:active {
 
 .add-lesson {
     padding: 0;
-    line-height: 90px;
+    line-height: 88px;
     text-align: center;
     font-size: 75px;
     background-color: whitesmoke;
@@ -183,9 +183,11 @@ h2#lesson-title {
     height: 450px;
     overflow-y: auto;
 }
-#lesson-list-of-student{
+
+#lesson-list-of-student {
     height: 280px;
 }
+
 .doc-ico div {
     white-space: nowrap;
     overflow: hidden;
@@ -200,16 +202,74 @@ a:hover .lesson-ico {
 .doc-name {
     margin: 0;
 }
-.doc-tag{
+
+.doc-tag {
     display: block;
     position: absolute;
     top: 31px;
     right: 19px;
 }
+
 .doc-update-time {
     font-family: serif;
     font-size: 10px;
     margin-left: 0px;
     margin-bottom: -6px;
     color: rgb(51, 122, 183);
+}
+/* login*/
+
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+    padding-top: 80px;
+    margin: 0 auto;
+}
+
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+    margin-bottom: 10px;
+}
+.form-signin .checkbox {
+    font-weight: normal;
+}
+
+.form-signin .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.form-signin .form-control:focus {
+    z-index: 2;
+}
+
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.editor-box {
+
+}
+.editor-box .editor_area{
+    margin-top: 30px;
+}
+.header.purple{
+    background-color: #6f5499;
+}
+
+.header.purple .nav-item{
+    color: #cdbfe3;
 }
