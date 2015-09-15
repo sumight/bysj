@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class=" evernoteSafari">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Blog Template for Bootstrap</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/editorStyle.css">
+</head>
+
+<body ng-app ng-controller='main'>
+    <div class="header" ng-click='saveDocument()'>
+        <div class="container">
+            <nav class="nav">
+                <a class="nav-item" href="/interface/courseOfStudent">主页</a>
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6">
+                <div role="tabpanel" class="ref-doc-box">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#course-part" aria-controls="profile" role="tab" data-toggle="tab">列表</a></li>
+                        <li role="presentation"><a id='J_ref-doc-trigger' href="#doc-part" aria-controls="home" role="tab" data-toggle="tab">文档</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="course-part">
+                            <div class="row ref-doc-list">
+                                <div class="col-xs-4" ng-repeat='doc in data.docSummary  | filter: "课堂内容"'>
+                                    <a href="javascript:void(0)" ng-click='openRefDoc(doc)'>
+                                        <div class="panel panel-default doc-ico">
+                                            <div class="panel-body">
+                                                课堂内容
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-xs-4" ng-repeat='doc in data.docSummary  | filter: "演示文稿"'>
+                                    <a href="javascript:void(0)" ng-click='openRefDoc(doc)'>
+                                        <div class="panel panel-default doc-ico">
+                                            <div class="panel-body">
+                                                演示文稿
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-xs-4" ng-repeat='doc in data.docSummary  | filter: "笔记"'>
+                                    <a href="javascript:void(0)" ng-click='openRefDoc(doc)'>
+                                        <div class="panel panel-default doc-ico">
+                                            <div class="panel-body">
+                                                课堂笔记
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-xs-12">
+                                    <hr>
+                                    <p class="doc-label">老师的文档</p>
+                                </div>
+                                <div class="col-xs-4" ng-repeat='doc in data.docSummary | filter:"一般" | filter:data.teacherId'>
+                                    <a href="javascript:void(0)" ng-click='openRefDoc(doc)'>
+                                        <div class="panel panel-default doc-ico">
+                                            <div class="panel-body">
+                                                {{doc.docTitle}}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-xs-12">
+                                    <hr>
+                                    <p class="doc-label">我的课程文档</p>
+                                </div>
+                                <div class="col-xs-4" ng-repeat='doc in data.docSummary | filter:"一般" | filter:data.courseId | filter:data.userId'>
+                                    <a href="javascript:void(0)" ng-click='openRefDoc(doc)'>
+                                        <div class="panel panel-default doc-ico">
+                                            <div class="panel-body">
+                                                {{doc.docTitle}}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-xs-12">
+                                    <hr>
+                                    <p class="doc-label">我的课堂文档</p>
+                                </div>
+                                <div class="col-xs-4" ng-repeat='doc in data.docSummary | filter:"一般" |filter:data.lessonId'>
+                                    <a href="javascript:void(0)" ng-click='openRefDoc(doc)'>
+                                        <div class="panel panel-default doc-ico">
+                                            <div class="panel-body">
+                                                {{doc.docTitle}}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="doc-part">
+                            <div class="col-xs-12 editor-box">
+                                <section class="editor_area ref-doc" data-headingmodel="false">
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="col-xs-12 editor-box editor-box-docE">
+                    <section class="editor_area edit-doc" data-headingmodel="false">
+                        <%= content%>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src='/js/angular.js'></script>
+    <script type="text/javascript" src='/js/public.js'></script>
+    <script type="text/javascript" src='/js/test.js'></script>
+    <script src='/js/require.js' data-main='/js/editor/main.js'></script>
+    <script type="text/javascript">
+    var userType = '<%= userType%>';
+    var courseId = '<%= courseId%>';
+    var lessonId = '<%= lessonId%>';
+    var teacherId = '<%= teacherId%>';
+    var userId = '<%= userId%>';
+
+    function main($scope, $http) {
+        $scope.data = {};
+
+        $scope.data.userType = userType;
+        $scope.data.courseId = courseId;
+        $scope.data.lessonId = lessonId;
+        $scope.data.teacherId = teacherId;
+        $scope.data.userId = userId;
+
+        $scope.data.docId = document.location.search.split('=')[1];
+        $scope.data.docSummary = [];
+        if (courseId && courseId !== '') {
+            $http.get("/ajax/getDocSummaryOfCourse?courseId=" + courseId).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    $scope.data.docSummary = $scope.data.docSummary.concat(response.data);
+                } else {
+                    alert(response.message);
+                }
+            })
+            if (userType === '学生') {
+                $http.get("/ajax/getDocSummaryOfCourseOfTeacher?courseId=" + courseId + '&teacherId=' + teacherId).success(function(response) {
+                    if (response.status === 'ok') {
+                        console.log(response);
+                        $scope.data.docSummary = $scope.data.docSummary.concat(response.data);
+                    } else {
+                        alert(response.message);
+                    }
+                })
+            }
+        }
+        if (lessonId && lessonId != '') {
+            $http.get("/ajax/getDocsOfLesson?lessonId=" + lessonId).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    $scope.data.docSummary = $scope.data.docSummary.concat(response.data);
+                } else {
+                    alert(response.message);
+                }
+            })
+            if (userType === '学生') {
+                $http.get("/ajax/getDocSummaryOfLessonOfTeacher?lessonId=" + lessonId).success(function(response) {
+                    if (response.status === 'ok') {
+                        console.log(response);
+                        $scope.data.docSummary = $scope.data.docSummary.concat(response.data);
+                    } else {
+                        alert(response.message);
+                    }
+                })
+            }
+        }
+        /**
+         * 保存一个文档
+         * @function saveDocument
+         * @param {String} docId 当前要保存的文档的id
+         * @param {String} docTitle 文档的标题
+         * @param {String} content 文档的内容
+         */
+        $scope.saveDocument = function() {
+            if (!document.getElementById('h1')) return;
+            var docId = $scope.data.docId
+            var docTitle = document.getElementById('h1').innerText;
+            var tags = docTitle.split(":")[1] || '';
+            var content = document.getElementsByClassName('edit-doc')[0].innerHTML;
+            $http.post("/ajax/updateDocumentContent", {
+                docId: docId,
+                docTitle: docTitle,
+                content: content,
+                tags: tags
+            }).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                } else {
+                    alert(response.message);
+                }
+            })
+        }
+
+        // 打开一个参考文档
+        $scope.openRefDoc = function(doc) {
+            $http.get("/ajax/getDocument?docId=" + doc._id).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    document.getElementsByClassName("ref-doc")[0].innerHTML = response.data.content;
+                    document.getElementById('J_ref-doc-trigger').click();
+                } else {
+                    alert(response.message);
+                }
+            })
+        }
+
+        // 文档保存触发器注册
+        docSaveTrigger(window, function() {
+            $scope.saveDocument();
+        })
+
+        // 将文档内容转化为html
+        document.getElementsByClassName('edit-doc')[0].innerHTML = document.getElementsByClassName('edit-doc')[0].innerText;
+    }
+    </script>
+</body>
+
+</html>
