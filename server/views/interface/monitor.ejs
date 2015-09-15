@@ -67,8 +67,8 @@
             </div>
         </div>
     </div>
-    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src='/js/angular.js'></script>
     <script src='/js/public.js'></script>
     <script type="text/javascript">
@@ -95,6 +95,7 @@
 
         $scope.clickLessonList = function(lesson, courseId) {
             $scope.data.currentLesson = lesson;
+            console.log(lesson);
             $http.get("/ajax/getStudentByCourse?courseId=" + courseId).success(function(response) {
                 if (response.status === 'ok') {
                     console.log(response);
@@ -113,8 +114,9 @@
          * @param student 学生对象
          */
         $scope.clickStudentList = function(student) {
-                console.log(student);
-                $http.get("/ajax/getDocsOfStudent?studentId=" + student._id).success(function(response) {
+                console.log('student',student);
+                console.log('lesson',$scope.currentLesson);
+                $http.get("/ajax/getDocsOfStudentOfLesson?studentId=" + student._id+"&lessonId="+$scope.data.currentLesson._id).success(function(response) {
                     if (response.status === 'ok') {
                         console.log(response);
                         $scope.data.docsOfStudent = response.data;

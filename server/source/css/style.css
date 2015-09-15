@@ -1,7 +1,7 @@
 /*
  * Globals
  */
-
+::-webkit-scrollbar{width:0px}
 body {
     font-family: Georgia, "Times New Roman", Times, serif;
     color: #555;
@@ -134,11 +134,13 @@ a:active {
     outline: 0px;
 }
 
-#lesson-list-box {
-    margin-top: 0;
+#lesson-list-box{
+    margin-top: 0px;
     height: 489px;
 }
-
+#important-doc-list{
+    margin-top: 10px;
+}
 #lesson-summary {
     text-align: center;
     padding: 10px;
@@ -230,6 +232,7 @@ a:hover .lesson-ico {
 .form-signin .checkbox {
     margin-bottom: 10px;
 }
+
 .form-signin .checkbox {
     font-weight: normal;
 }
@@ -261,15 +264,46 @@ a:hover .lesson-ico {
 }
 
 .editor-box {
+    box-shadow: 0px 0px 10px -3px;
+}
 
+.editor-box  {
+    margin-top: 10px;
+    padding-top: 10px;
 }
-.editor-box .editor_area{
-    margin-top: 30px;
+
+.editor-box-course{
+    margin-top: 25px;
 }
-.header.purple{
+
+
+.editor-box-docE{
+    margin-top: 35px;
+}
+.editor-box-docE .editor_area{
+    height: 700px;
+}
+
+.header.purple {
     background-color: #6f5499;
 }
 
-.header.purple .nav-item{
+.header.purple .nav-item {
     color: #cdbfe3;
+}
+/* editDoc */
+
+.ref-doc-box,
+.edit-doc {
+    margin-top: 35px;
+}
+
+.ref-doc-box {
+    
+}
+.ref-doc-list, .ref-doc{
+    margin-top: 20px;
+    height: 500px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }

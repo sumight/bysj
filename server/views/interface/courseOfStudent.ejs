@@ -68,14 +68,14 @@
                                     </div>
                                     <div class="list-group" id="course-doc-list-of-student">
                                         <a class="list-group-item add-item" ng-click='clickToAddDocument(data.currentCourse)'>+</a>
-                                        <a class="list-group-item" href="javascript:void(0)" ng-repeat='docBrief in data.docSummary' ng-click='clickDocList(docBrief)'>
+                                        <a class="list-group-item" href="javascript:void(0)" ng-repeat='docBrief in data.docSummary' ng-click='clickDocList(docBrief)' ng-dblclick='editInAnohterPage(docBrief)'>
                                             <p class="doc-name hide-text">{{docBrief.docTitle}}</p>
                                             <span class='doc-update-time'>{{docBrief.updateDate | date:"yyyy/MM/dd"}}</span>
                                             <span class='doc-tag badge'>{{docBrief.tag}}</span>
                                         </a>
                                     </div>
                                 </div>
-                                <div class="col-xs-9 editor-box">
+                                <div class="col-xs-9 editor-box editor-box-course">
                                     <section class="editor_area" data-headingmodel="false">
                                     </section>
                                 </div>
@@ -86,8 +86,8 @@
             </div>
         </div>
     </div>
-    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src='/js/angular.js'></script>
     <script type="text/javascript" src='/js/public.js'></script>
     <script type="text/javascript" src='/js/test.js'></script>
@@ -99,8 +99,8 @@
             if (response.status === 'ok') {
                 console.log(response);
                 $scope.data.courses = response.data;
-                if($scope.data.courses.length > 0)
-                        $scope.clickCourseList($scope.data.courses[0]);
+                if ($scope.data.courses.length > 0)
+                    $scope.clickCourseList($scope.data.courses[0]);
             } else {
                 alert(response.message);
                 document.location = './login';
@@ -128,7 +128,7 @@
                 if (response.status === 'ok') {
                     console.log(response);
                     $scope.data.docSummary = response.data;
-                    if($scope.data.docSummary.length > 0)
+                    if ($scope.data.docSummary.length > 0)
                         $scope.clickDocList($scope.data.docSummary[0]);
                 } else {
                     alert(response.message);
@@ -189,33 +189,38 @@
          * @param {String} content 文档的内容
          */
         $scope.saveDocument = function() {
-                if (!document.getElementById('h1')) return;
-                var docId = $scope.data.currentDocId;
-                var docTitle = document.getElementById('h1').innerText;
-                var content = document.getElementsByClassName('editor_area')[0].innerHTML;
+            if (!document.getElementById('h1')) return;
+            var docId = $scope.data.currentDocId;
+            var docTitle = document.getElementById('h1').innerText;
+            var content = document.getElementsByClassName('editor_area')[0].innerHTML;
 
-                $http.post("/ajax/updateDocumentContent", {
-                    docId: docId,
-                    docTitle: docTitle,
-                    content: content
-                }).success(function(response) {
-                    if (response.status === 'ok') {
-                        console.log(response);
-                        $scope.data.currentDocBrief.docTitle = docTitle;
-                    } else {
-                        alert(response.message);
-                    }
-                })
-            }
-            /**
-             * 打开一个课堂页面
-             * @function openLessonPage
-             * @param {String} lessonId 要打开的课堂id
-             */
+            $http.post("/ajax/updateDocumentContent", {
+                docId: docId,
+                docTitle: docTitle,
+                content: content
+            }).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                    $scope.data.currentDocBrief.docTitle = docTitle;
+                } else {
+                    alert(response.message);
+                }
+            })
+        }
+
+        /**
+         * 打开一个课堂页面
+         * @function openLessonPage
+         * @param {String} lessonId 要打开的课堂id
+         */
         $scope.openLessonPage = function(lessonId) {
-                window.open('/interface/lessonOfStudent?lessonId=' + lessonId);
-            }
-            // 文档保存触发器注册
+            window.open('/interface/lessonOfStudent?lessonId=' + lessonId);
+        }
+
+        //在独立页面中编辑
+        $scope.editInAnohterPage = editInAnohterPage; 
+
+        // 文档保存触发器注册
         docSaveTrigger(window, function() {
             $scope.saveDocument();
         })

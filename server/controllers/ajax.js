@@ -247,7 +247,10 @@ module.exports = {
                     docTitle: 1,
                     tags: 1,
                     type: 1,
-                    updateDate: 1
+                    updateDate: 1,
+                    courseId:1,
+                    lessonId:1,
+                    userId:1
                 }
             }).sort({
                 updateDate: -1
@@ -330,7 +333,10 @@ module.exports = {
                     docTitle: 1,
                     tags: 1,
                     type: 1,
-                    updateDate: 1
+                    updateDate: 1,
+                    courseId:1,
+                    lessonId:1,
+                    userId:1
                 }
             }).sort({
                 updateDate: -1
@@ -583,7 +589,10 @@ module.exports = {
                     docTitle: 1,
                     tags: 1,
                     type: 1,
-                    updateDate: 1
+                    updateDate: 1,
+                    courseId:1,
+                    lessonId:1,
+                    userId:1
                 }
             }).sort({
                 updateDate: -1
@@ -719,21 +728,27 @@ module.exports = {
     },
     /**
      * 获取一个学生所有的文档
-     * @function getDocsOfStudent
+     * @function getDocsOfStudentOfLesson
      */
-    getDocsOfStudent: function(params) {
+    getDocsOfStudentOfLesson: function(params) {
         var studentId = new ObjectID(params.studentId);
+        var lessonId = new ObjectID(params.lessonId);
         MongoClient.connect('mongodb://localhost:12355/bysj', function(err, db) {
             var documents = db.collection('documents');
+            console.log('params',params);
             documents.find({
-                userId: studentId
+                userId: studentId,
+                lessonId: lessonId
             }, {
                 fields: {
                     _id: 1,
                     docTitle: 1,
                     tags: 1,
                     type: 1,
-                    updateDate: 1
+                    updateDate: 1,
+                    courseId:1,
+                    lessonId:1,
+                    userId:1
                 }
             }).sort({
                 updateDate: -1
@@ -747,4 +762,74 @@ module.exports = {
             })
         })
     }
+    // docEdit: function(params) {
+    //     var session = mvc.getSession();
+    //     if (!session || !session.user) {
+    //         mvc.data({
+    //             status: 'fail',
+    //             message: '请登录',
+    //             data: {}
+    //         });
+    //         return;
+    //     }
+
+    //     var courseId = params.courseId;
+    //     var lessonId = params.lessonId;
+    //     var pageData = {
+    //         editingDoc: null,
+    //         docSummery: [],
+    //         userId:session.user._id
+    //     }
+        
+    //     if (!docId) {
+    //         mvc.view({});
+    //         return;
+    //     }
+
+    //     if (!courseId && !lessonId) {
+    //         mvc.view({});
+    //         return;
+    //     }
+    //     var docId = new ObjectID(params.docId);
+    //     MongoClient.connect('mongodb://localhost:12355/bysj', function(err, db) {
+    //         assert.equal(null, err);
+    //         var documents = db.collection('documents');
+    //         documents.findOne({
+    //             _id: docId
+    //         }, function(err, document) {
+    //             pageData.editingDoc = document;
+    //             if (courseId) {
+    //                 var documents = db.collection('documents');
+    //                 documents.find({
+    //                     courseId: courseId,
+    //                     userId: session.user._id
+    //                 },{
+    //                     fields: {
+    //                         _id: 1,
+    //                         docTitle: 1,
+    //                         tags: 1,
+    //                         type: 1,
+    //                         updateDate: 1,
+    //                         userId:1,
+    //                         courseId:1,
+    //                         lessonId:1
+    //                     }
+    //                 }).sort({
+    //                     updateDate: -1
+    //                 }).toArray(function(err, docs) {
+    //                     assert.equal(null, err);
+    //                     // 将本人的笔记添加其中
+    //                     if (docs && docs.length > 0)
+    //                         pageData.docSummery = pageData.docSummery.concat(docs);
+    //                     if(user.userType==='学生'){
+
+    //                     }
+    //                 })
+    //             }
+    //             if (lessonId) {
+
+    //             }
+    //         })
+    //     })
+    // }
 }

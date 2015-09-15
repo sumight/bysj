@@ -27,11 +27,11 @@
             <div class="col-xs-3 sider list-box" id="lesson-list-box">
                 <div class="list-group" id="important-doc-list">
                     <a class="list-group-item" href="javascript:void(0)" id="lesson-content-doc" ng-repeat='docBrief in data.docSummary | filter: "课堂内容"' ng-click='clickDocList(docBrief)'>课堂内容</a>
-                    <a class="list-group-item" href="javascript:void(0)" id="lesson-ppt-doc" ng-repeat='docBrief in data.docSummary | filter: "演示文稿"' ng-click='clickDocList(docBrief)'>演示文稿</a>
+                    <a class="list-group-item" href="javascript:void(0)" id="lesson-ppt-doc" ng-repeat='docBrief in data.docSummary | filter: "演示文稿"' ng-click='clickDocList(docBrief)' ng-dblclick='ppt()'>演示文稿</a>
                 </div>
                 <div class="list-group" id="other-doc-list">
                     <a class="list-group-item add-item" ng-click="clickToAddDocument()">+</a>
-                    <a class="list-group-item" href="javascript:void(0)" ng-repeat='docBrief in data.docSummary | filter: "一般"' ng-click='clickDocList(docBrief)'>
+                    <a class="list-group-item" href="javascript:void(0)" ng-repeat='docBrief in data.docSummary | filter: "一般"' ng-click='clickDocList(docBrief)' ng-dblclick='editInAnohterPage(docBrief)'>
                         <p class="doc-name hide-text">{{docBrief.docTitle}}</p>
                         <span class='doc-update-time'>{{docBrief.updateDate | date:"yyyy/MM/dd"}}</span>
                         <span class='doc-tag badge'>{{docBrief.tag}}</span>
@@ -44,8 +44,8 @@
             </div>
         </div>
     </div>
-    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src='/js/angular.js'></script>
     <script type="text/javascript" src='/js/public.js'></script>
     <script type="text/javascript" src='/js/test.js'></script>
@@ -63,9 +63,9 @@
                 if (response.status === 'ok') {
                     console.log(response);
                     $scope.data.docSummary = response.data;
-                    for(var key in $scope.data.docSummary){
+                    for (var key in $scope.data.docSummary) {
                         var doc = $scope.data.docSummary[key];
-                        if(doc.type === '课堂内容'){
+                        if (doc.type === '课堂内容') {
                             $scope.clickDocList(doc);
                             break;
                         }
@@ -93,7 +93,7 @@
              * @param {String} docId 文档的id
              */
         $scope.clickDocList = function(docBrief) {
-                var docId = docBrief._id; 
+                var docId = docBrief._id;
                 $http.get("/ajax/getDocument?docId=" + docId).success(function(response) {
                     if (response.status === 'ok') {
                         console.log(response);
@@ -134,26 +134,37 @@
         }
 
         $scope.saveLessonInfo = function() {
-                var lessonId = $scope.data.lessonId;
-                var lessonTitle = document.getElementById('lesson-title').value;
-                var summary = document.getElementById('lesson-summary').value;
+            var lessonId = $scope.data.lessonId;
+            var lessonTitle = document.getElementById('lesson-title').value;
+            var summary = document.getElementById('lesson-summary').value;
 
-                $http.post("/ajax/saveLessonInfo", {
-                    lessonId: lessonId,
-                    lessonTitle: lessonTitle,
-                    summary: summary
-                }).success(function(response) {
-                    if (response.status === 'ok') {
-                        console.log(response);
-                    } else {
-                        alert(response.message);
-                    }
-                })
-            }
-            // 文档保存触发器注册
+            $http.post("/ajax/saveLessonInfo", {
+                lessonId: lessonId,
+                lessonTitle: lessonTitle,
+                summary: summary
+            }).success(function(response) {
+                if (response.status === 'ok') {
+                    console.log(response);
+                } else {
+                    alert(response.message);
+                }
+            })
+        }
+
+        //全屏显示元素
+        $scope.ppt = function(){
+            var docArea = document.getElementsByClassName('editor_area')[0];
+            showInFullScreen(docArea); 
+        }
+
+        //在独立页面中编辑
+        $scope.editInAnohterPage = editInAnohterPage;
+
+        // 文档保存触发器注册
         docSaveTrigger(window, function() {
             $scope.saveDocument();
         })
+
     }
     </script>
 </body>
